@@ -87,7 +87,7 @@ export function ActivitiesCarousel({ images = [] }) {
       <div ref={ref} className="flex gap-4 overflow-x-auto snap-x snap-mandatory scroll-smooth pb-2" style={{ scrollPadding: "1rem" }} aria-label="Galeri aktivitas">
         {list.map((src, i) => (
           <div key={src + i} className="min-w-[80%] md:min-w-[45%] lg:min-w-[32%] snap-start">
-            <SafeImage src={src} width={1280} height={720} alt={`Activity ${i + 1}`} className="w-full h-56 md:h-72 object-cover rounded-2xl border" priority={i < 1} />
+            <SafeImage src={src} width={1280} height={720} alt={`Activity ${i + 1}`} className="w-full h-56 md:h-72 object-cover rounded-2xl border" priority={i < 1} unoptimized />
           </div>
         ))}
       </div>
@@ -137,7 +137,7 @@ export function FacilitatorCarousel({ people = [] }) {
           <div key={(p.name || "person") + i} className="min-w-[85%] md:min-w-[48%] lg:min-w-[32%] snap-start">
             <div className="rounded-2xl border bg-white/80 backdrop-blur shadow p-4">
               <div className="flex items-center gap-4">
-                <SafeImage src={p.photo} width={96} height={96} alt={p.name || "Facilitator"} className="w-24 h-24 rounded-xl object-cover border" priority={i < 2} />
+                <SafeImage src={p.photo} width={96} height={96} alt={p.name || "Facilitator"} className="w-24 h-24 rounded-xl object-cover border" priority={i < 2} unoptimized />
                 <div className="min-w-0">
                   <div className="font-bold leading-tight">{p.name}</div>
                   {p.title && <div className="text-sm text-slate-500">{p.title}</div>}
