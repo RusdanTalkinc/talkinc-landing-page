@@ -7,12 +7,21 @@ import { Countdown } from "@/components/countdown";
 import { fmtDate } from "@/lib/datetime";
 import { ActivitiesCarousel, FacilitatorCarousel } from "@/components/carousel";
 import { Timeline } from "@/components/timeline";
+import { Extras } from "@/components/extras";
+import AboutSection from "@/components/about";
+/* import { ProgramSummary } from "@/components/ProgramSummary"; */
+import { Testimonials } from "@/components/testimonials";
+
+import dynamic from "next/dynamic";
+// ganti import langsung:
+const AudienceList = dynamic(() => import("@/components/audience").then((m) => m.AudienceList), { ssr: false });
+const ProgramSummary = dynamic(() => import("@/components/ProgramSummary").then((m) => m.ProgramSummary), { ssr: false });
 
 export function ProgramDetail({ slug }) {
   const program = CONFIG.programs.find((p) => p.slug === slug);
   if (!program) return <div className="min-h-screen flex items-center justify-center">Program tidak ditemukan</div>;
 
-  const { pageTitle, pageDescription, mayarLink, hero, problems, about, learn, audience, details, testimonials, batch, startDate } = program;
+  const { pageTitle, pageDescription, mayarLink, hero, problems, learn, audience, details, testimonials, batch, startDate } = program;
 
   return (
     <div className="min-h-screen">
@@ -34,7 +43,15 @@ export function ProgramDetail({ slug }) {
               <Countdown startISO={startDate} />
             </div>
 
-            <CTAButtons mayarLink={mayarLink} adminWA={ADMIN_WA} />
+            <CTAButtons
+              mayarLink={mayarLink}
+              adminWA={ADMIN_WA}
+              onClick={() => {
+                if (typeof window !== "undefined" && window.fbq) {
+                  fbq("track", "Purchase", { value: 1, currency: "IDR" });
+                }
+              }}
+            />
             <div className="mt-3 text-xs text-emerald-700 font-medium">
               <span className="flame" aria-hidden>
                 🔥
@@ -44,13 +61,10 @@ export function ProgramDetail({ slug }) {
           </div>
 
           {/* Kartu ringkas hero-copy (opsional) */}
-          <Card className="bg-gradient-to-br from-indigo-500/10 to-fuchsia-500/10">
-            <h3 className="text-xl font-bold">Ubah Gugup Jadi Percaya Diri</h3>
-            <p className="mt-2 text-slate-700">
-              <span className="font-semibold">Headline:</span> {hero.headline}
-            </p>
+          <Card className="bg-linear-to-br from-indigo-500/10 to-fuchsia-500/10">
+            <h3 className="text-xl font-bold">{hero.headline}</h3>
             <p className="text-slate-700">
-              <span className="font-semibold">Subheadline:</span> {hero.subheadline}
+              <span className="font-semibold"></span> {hero.subheadline}
             </p>
           </Card>
         </div>
@@ -116,34 +130,24 @@ export function ProgramDetail({ slug }) {
         <FacilitatorCarousel people={CONFIG.facilitators} />
       </Section>
 
+      {/* About */}
+      <Section title="">
+        <AboutSection about={program.about} />
+      </Section>
       {/* WHAT YOU'LL LEARN */}
       <Section title="Apa yang Akan Kamu Pelajari">
-        <div className="grid lg:grid-cols-3 gap-6">
+        <div>
           <div className="lg:col-span-1">
             <div className="rounded-2xl border bg-white/70 backdrop-blur p-6 shadow">
               <h4 className="font-semibold mb-3">Encounter</h4>
               <Timeline items={learn.encounters || []} />
             </div>
           </div>
-
-          <Card>
-            <h4 className="font-semibold">Format Pembelajaran</h4>
-            <ul className="mt-2 list-disc ml-5 space-y-1 text-slate-700">
-              {(learn.format || []).map((f, i) => (
-                <li key={i}>{f}</li>
-              ))}
-            </ul>
-          </Card>
-
-          <Card>
-            <h4 className="font-semibold">Benefit</h4>
-            <ul className="mt-2 list-disc ml-5 space-y-1 text-slate-700">
-              {(learn.benefits || []).map((b, i) => (
-                <li key={i}>{b}</li>
-              ))}
-            </ul>
-          </Card>
         </div>
+      </Section>
+      {/* Detail Program */}
+      <Section>
+        <Extras items={learn.extras || []} />
       </Section>
 
       {/* ACTIVITIES – Carousel */}
@@ -153,36 +157,26 @@ export function ProgramDetail({ slug }) {
 
       {/* AUDIENCE */}
       <Section title="Program Ini Cocok Untuk Siapa?">
-        <Card>
-          <ul className="list-disc ml-5 space-y-1 text-slate-700">
-            {audience.map((a, i) => (
-              <li key={i}>{a}</li>
-            ))}
-          </ul>
-        </Card>
+        <AudienceList items={audience || []} />
       </Section>
 
       {/* DETAILS & INVESTMENT */}
       <Section title="Detail Program & Nilai Investasi">
         <div className="grid md:grid-cols-3 gap-6 items-start">
+          {/* Summary Program */}
           <Card className="md:col-span-2">
-            <div className="grid sm:grid-cols-2 gap-x-8 gap-y-3 text-slate-700">
-              <Field label="Format kelas" value={details.format} />
-              <Field label="Durasi" value={details.duration} />
-              <Field label="Kapasitas" value={details.capacity} />
-              <Field label="Level" value={details.level} />
-              <Field label="Lokasi" value={details.location} />
-              <Field label="Jadwal" value={details.schedule} />
-              <Field label="Waktu" value={details.time} />
+            <div className="grid sm:grid-cols-2 gap-3 space-y-3 summary-animate">
+              <ProgramSummary items={program.summary} />
             </div>
           </Card>
+
+          {/* Investasi */}
           <Card>
             <div className="text-sm text-slate-500">Investasi</div>
-
             {/* Harga: coret harga normal + tampilkan harga diskon */}
             <div className="mt-1">
               <div className="text-sm text-slate-400 line-through">{new Intl.NumberFormat("id-ID", { style: "currency", currency: "IDR", maximumFractionDigits: 0 }).format(details.normalPrice)}</div>
-              <div className="text-4xl font-extrabold bg-clip-text text-transparent bg-gradient-to-r from-indigo-600 to-fuchsia-600">
+              <div className="text-4xl font-extrabold bg-clip-text text-transparent bg-linear-to-r from-indigo-600 to-fuchsia-600">
                 {new Intl.NumberFormat("id-ID", { style: "currency", currency: "IDR", maximumFractionDigits: 0 }).format(details.discountPrice)}
               </div>
               {/* Badge hemat */}
@@ -199,23 +193,25 @@ export function ProgramDetail({ slug }) {
               <span className="text-emerald-700">Tersisa {details.seats_left} slot lagi — amankan kursi Anda.</span>
             </div>
 
-            <CTAButtons mayarLink={mayarLink} adminWA={ADMIN_WA} />
+            <CTAButtons
+              mayarLink={mayarLink}
+              adminWA={ADMIN_WA}
+              onClick={() => {
+                if (typeof window !== "undefined" && window.fbq) {
+                  fbq("track", "Contact");
+                }
+              }}
+            />
           </Card>
         </div>
       </Section>
 
       {/* TESTIMONIALS */}
       <Section title="Apa Kata Alumni?">
-        <div className="grid md:grid-cols-2 gap-4">
-          {testimonials.map((t, i) => (
-            <Card key={i}>
-              <p className="text-slate-700">“{t.text}”</p>
-              <div className="mt-2 text-sm text-slate-500">— {t.name}</div>
-            </Card>
-          ))}
+        <div>
+          <Testimonials items={testimonials || []} />
         </div>
       </Section>
-
       {/* LOGOS */}
       <Section title="Dipercaya oleh Profesional dari Berbagai Perusahaan">
         <div className="grid grid-cols-2 sm:grid-cols-4 gap-6 items-center">
@@ -229,7 +225,7 @@ export function ProgramDetail({ slug }) {
 
       {/* FINAL CTA */}
       <Section>
-        <Card className="text-center bg-gradient-to-br from-indigo-500/10 to-fuchsia-500/10">
+        <Card className="text-center bg-linear-to-br from-indigo-500/10 to-fuchsia-500/10">
           <h3 className="text-2xl font-bold">Siap naik level komunikasi?</h3>
           <p className="text-slate-600 mt-1">Daftar sekarang atau konsultasi dengan admin untuk pilih program yang pas.</p>
           <CTAButtons mayarLink={mayarLink} adminWA={ADMIN_WA} />

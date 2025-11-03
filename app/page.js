@@ -35,7 +35,7 @@ export default function HomePage() {
               className="group rounded-2xl border border-white/40 bg-white/70 backdrop-blur p-5 shadow hover:shadow-xl transition hover:-translate-y-0.5"
             >
               <div className="flex items-center gap-4">
-                <div className={`w-14 h-14 rounded-xl bg-gradient-to-br ${p.color} shadow-md`} />
+                <div className={`w-14 h-14 rounded-xl bg-linear-to-br ${p.color} shadow-md`} />
                 <div className="flex-1 text-left">
                   <div className="text-lg sm:text-xl font-bold tracking-tight group-hover:underline">
                     {p.pageTitle}

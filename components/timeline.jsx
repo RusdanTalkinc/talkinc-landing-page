@@ -7,11 +7,11 @@ export function Timeline({ items = [] }) {
       {items.map((it, i) => (
         <li key={i} className="ms-6 pb-6 group">
           {/* Node */}
-          <span className="absolute -start-[10px] mt-1 size-5 rounded-full border-2 border-white bg-gradient-to-br from-indigo-500 to-fuchsia-500 shadow group-hover:scale-105 transition-transform"></span>
+          <span className="absolute -start-2.5 mt-1 size-5 rounded-full border-2 border-white bg-linear-to-br from-indigo-500 to-fuchsia-500 shadow group-hover:scale-105 transition-transform"></span>
 
           {/* Index badge / date */}
           <div className="flex items-center gap-2">
-            <span className="inline-flex min-w-7 justify-center rounded-full bg-white/80 px-2 py-0.5 text-xs font-semibold border">{it.date || `#${String(i + 1).padStart(2, "0")}`}</span>
+            <span className="inline-flex min-w-15 justify-center rounded-full bg-white/80 px-2 py-0.5 text-xs font-semibold border">{it.date || `#${String(i + 1).padStart(2, "0")}`}</span>
             <h4 className="text-base sm:text-lg font-bold leading-snug">{it.title}</h4>
           </div>
 
