@@ -30,7 +30,7 @@ export function Card({ children, className = "" }) {
 }
 
 export function Badge({ children }) {
-  return <span className="inline-flex items-center rounded-full border border-slate-300/70 bg-white/70 px-3 py-1 text-xs font-semibold">{children}</span>;
+  return <span className="inline-flex items-center rounded-full border border-slate-300/70 bg-white/70 px-3 py-1 text-xs font-semibold min-w-20">{children}</span>;
 }
 
 export function GradientButton({ href, children, variant = "primary" }) {

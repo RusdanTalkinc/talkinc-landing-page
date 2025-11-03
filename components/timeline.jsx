@@ -11,7 +11,7 @@ export function Timeline({ items = [] }) {
 
           {/* Index badge / date */}
           <div className="flex items-center gap-2">
-            <span className="inline-flex min-w-15 justify-center rounded-full bg-white/80 px-2 py-0.5 text-xs font-semibold border">{it.date || `#${String(i + 1).padStart(2, "0")}`}</span>
+            <span className="inline-flex min-w-25 justify-center rounded-full bg-white/80 px-2 py-0.5 text-xs font-semibold border">{it.date || `#${String(i + 1).padStart(2, "0")}`}</span>
             <h4 className="text-base sm:text-lg font-bold leading-snug">{it.title}</h4>
           </div>
 
