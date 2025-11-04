@@ -33,21 +33,23 @@ export function Badge({ children }) {
   return <span className="inline-flex items-center rounded-full border border-slate-300/70 bg-white/70 px-3 py-1 text-xs font-semibold min-w-20">{children}</span>;
 }
 
-export function GradientButton({ href, children, variant = "primary" }) {
+export function GradientButton({ href, children, variant = "primary", onClick }) {
   const base = "inline-flex justify-center items-center rounded-xl px-5 py-3 font-semibold transition";
   const styles = variant === "primary" ? "bg-gradient-to-r from-indigo-600 to-fuchsia-600 text-white hover:brightness-95" : "border hover:bg-white/60";
   return (
-    <a href={href} target="_blank" rel="noreferrer" className={`${base} ${styles}`}>
+    <a href={href} target="_blank" rel="noreferrer" className={`${base} ${styles}`} onClick={onClick}>
       {children}
     </a>
   );
 }
 
-export function CTAButtons({ mayarLink, adminWA }) {
+export function CTAButtons({ mayarLink, adminWA, onMayarClick, onAdminClick }) {
   return (
     <div className="flex flex-col sm:flex-row justify-center items-center text-center gap-2 sm:gap-3 mt-5">
-      <GradientButton href={mayarLink}>Daftar & Bayar via Mayar</GradientButton>
-      <GradientButton href={adminWA} variant="ghost">
+      <GradientButton href={mayarLink} onClick={onMayarClick}>
+        Daftar & Bayar via Mayar
+      </GradientButton>
+      <GradientButton href={adminWA} variant="ghost" onClick={onAdminClick}>
         Konsultasi dengan Admin
       </GradientButton>
     </div>

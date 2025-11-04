@@ -18,6 +18,18 @@ const AudienceList = dynamic(() => import("@/components/audience").then((m) => m
 const ProgramSummary = dynamic(() => import("@/components/ProgramSummary").then((m) => m.ProgramSummary), { ssr: false });
 
 export function ProgramDetail({ slug }) {
+  const handleMayarClick = React.useCallback(() => {
+    if (typeof window !== "undefined" && window.fbq) {
+      window.fbq("track", "Purchase", { value: 1, currency: "IDR" });
+    }
+  }, []);
+
+  const handleAdminClick = React.useCallback(() => {
+    if (typeof window !== "undefined" && window.fbq) {
+      window.fbq("track", "Contact");
+    }
+  }, []);
+
   const program = CONFIG.programs.find((p) => p.slug === slug);
   if (!program) return <div className="min-h-screen flex items-center justify-center">Program tidak ditemukan</div>;
 
@@ -43,15 +55,7 @@ export function ProgramDetail({ slug }) {
               <Countdown startISO={startDate} />
             </div>
 
-            <CTAButtons
-              mayarLink={mayarLink}
-              adminWA={ADMIN_WA}
-              onClick={() => {
-                if (typeof window !== "undefined" && window.fbq) {
-                  fbq("track", "Purchase", { value: 1, currency: "IDR" });
-                }
-              }}
-            />
+            <CTAButtons mayarLink={mayarLink} adminWA={ADMIN_WA} onMayarClick={handleMayarClick} onAdminClick={handleAdminClick} />
             <div className="mt-3 text-xs text-emerald-700 font-medium">
               <span className="flame" aria-hidden>
                 🔥
@@ -193,15 +197,7 @@ export function ProgramDetail({ slug }) {
               <span className="text-emerald-700">Tersisa {details.seats_left} slot lagi — amankan kursi Anda.</span>
             </div>
 
-            <CTAButtons
-              mayarLink={mayarLink}
-              adminWA={ADMIN_WA}
-              onClick={() => {
-                if (typeof window !== "undefined" && window.fbq) {
-                  fbq("track", "Contact");
-                }
-              }}
-            />
+            <CTAButtons mayarLink={mayarLink} adminWA={ADMIN_WA} onMayarClick={handleMayarClick} onAdminClick={handleAdminClick} />
           </Card>
         </div>
       </Section>
@@ -229,7 +225,7 @@ export function ProgramDetail({ slug }) {
         <Card className="text-center bg-linear-to-br from-indigo-500/10 to-fuchsia-500/10">
           <h3 className="text-2xl font-bold">Siap naik level komunikasi?</h3>
           <p className="text-slate-600 mt-1">Daftar sekarang atau konsultasi dengan admin untuk pilih program yang pas.</p>
-          <CTAButtons mayarLink={mayarLink} adminWA={ADMIN_WA} />
+          <CTAButtons mayarLink={mayarLink} adminWA={ADMIN_WA} onMayarClick={handleMayarClick} onAdminClick={handleAdminClick} />
         </Card>
       </Section>
 
