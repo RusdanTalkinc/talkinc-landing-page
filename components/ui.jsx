@@ -45,7 +45,7 @@ export function GradientButton({ href, children, variant = "primary" }) {
 
 export function CTAButtons({ mayarLink, adminWA }) {
   return (
-    <div className="flex flex-col sm:flex-row gap-3 mt-5">
+    <div className="flex flex-col sm:flex-row justify-center items-center text-center gap-2 sm:gap-3 mt-5">
       <GradientButton href={mayarLink}>Daftar & Bayar via Mayar</GradientButton>
       <GradientButton href={adminWA} variant="ghost">
         Konsultasi dengan Admin
@@ -64,7 +64,7 @@ export function HeaderBar({ mayarLink }) {
           </Link>
           {mayarLink ? (
             <a href={mayarLink} target="_blank" className="text-sm underline">
-              Bayar via Mayar
+              Daftar via Mayar
             </a>
           ) : (
             <span />

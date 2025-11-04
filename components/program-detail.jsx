@@ -21,7 +21,7 @@ export function ProgramDetail({ slug }) {
   const program = CONFIG.programs.find((p) => p.slug === slug);
   if (!program) return <div className="min-h-screen flex items-center justify-center">Program tidak ditemukan</div>;
 
-  const { pageTitle, pageDescription, mayarLink, hero, problems, learn, audience, details, testimonials, batch, startDate } = program;
+  const { pageTitle, pageDescription, mayarLink, hero, problems, learn, audience, details, testimonialTitle, testimonials, batch, startDate } = program;
 
   return (
     <div className="min-h-screen">
@@ -207,11 +207,12 @@ export function ProgramDetail({ slug }) {
       </Section>
 
       {/* TESTIMONIALS */}
-      <Section title="Apa Kata Alumni?">
-        <div>
-          <Testimonials items={testimonials || []} />
-        </div>
-      </Section>
+      {testimonialTitle && testimonials?.length > 0 && (
+        <Section title={testimonialTitle}>
+          <Testimonials items={testimonials} />
+        </Section>
+      )}
+
       {/* LOGOS */}
       <Section title="Dipercaya oleh Profesional dari Berbagai Perusahaan">
         <div className="grid grid-cols-2 sm:grid-cols-4 gap-6 items-center">

@@ -53,6 +53,7 @@ export default function HomePage() {
         </div>
       </Section>
 
+
       <footer className="py-10 text-center text-sm text-slate-500">
         © {new Date().getFullYear()} TALKINC
       </footer>
