@@ -26,7 +26,7 @@ export default function HomePage() {
         </div>
       </Section>
 
-      <Section className="pt-0" subtitle="Pilih Program">
+      <Section className="pt-0 flex flex-col sm:flex-row justify-center items-center text-center" subtitle="Pilih Program">
         <div className="mx-auto max-w-3xl flex flex-col gap-4">
           {CONFIG.programs.map((p) => (
             <Link

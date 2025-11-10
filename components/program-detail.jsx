@@ -11,6 +11,7 @@ import { Extras } from "@/components/extras";
 import AboutSection from "@/components/about";
 /* import { ProgramSummary } from "@/components/ProgramSummary"; */
 import { Testimonials } from "@/components/testimonials";
+import { trackProgramView, trackScrollDepth } from "@/lib/analytics";
 
 import dynamic from "next/dynamic";
 // ganti import langsung:
@@ -31,6 +32,45 @@ export function ProgramDetail({ slug }) {
   }, []);
 
   const program = CONFIG.programs.find((p) => p.slug === slug);
+  React.useEffect(() => {
+    if (!program) return;
+    trackProgramView({ slug: program.slug, title: program.pageTitle });
+  }, [program?.slug, program?.pageTitle]);
+
+  React.useEffect(() => {
+    if (!program) return;
+    const thresholds = [25, 50, 75, 100];
+    const triggered = new Set();
+
+    const handleScroll = () => {
+      if (typeof window === "undefined") return;
+      const doc = document.documentElement;
+      const body = document.body;
+      const scrollHeight = Math.max(doc.scrollHeight, body.scrollHeight, doc.offsetHeight, body.offsetHeight, doc.clientHeight);
+      if (!scrollHeight) return;
+
+      const scrollTop = window.scrollY || doc.scrollTop || body.scrollTop || 0;
+      const viewportHeight = window.innerHeight || doc.clientHeight;
+      const progress = ((scrollTop + viewportHeight) / scrollHeight) * 100;
+
+      thresholds.forEach((threshold) => {
+        if (progress >= threshold && !triggered.has(threshold)) {
+          triggered.add(threshold);
+          trackScrollDepth({ slug: program.slug, depth: threshold });
+        }
+      });
+    };
+
+    window.addEventListener("scroll", handleScroll, { passive: true });
+    window.addEventListener("resize", handleScroll);
+    handleScroll();
+
+    return () => {
+      window.removeEventListener("scroll", handleScroll);
+      window.removeEventListener("resize", handleScroll);
+    };
+  }, [program?.slug]);
+
   if (!program) return <div className="min-h-screen flex items-center justify-center">Program tidak ditemukan</div>;
 
   const { pageTitle, pageDescription, mayarLink, hero, problems, learn, audience, details, testimonialTitle, testimonials, batch, startDate } = program;
@@ -55,7 +95,7 @@ export function ProgramDetail({ slug }) {
               <Countdown startISO={startDate} />
             </div>
 
-            <CTAButtons mayarLink={mayarLink} adminWA={ADMIN_WA} onMayarClick={handleMayarClick} onAdminClick={handleAdminClick} />
+            <CTAButtons mayamayarLink={mayarLink} adminWA={ADMIN_WA} onMayarClick={handleMayarClick} onAdminClick={handleAdminClick} />
             <div className="mt-3 text-xs text-emerald-700 font-medium">
               <span className="flame" aria-hidden>
                 🔥
