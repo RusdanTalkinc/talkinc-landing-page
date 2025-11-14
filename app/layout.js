@@ -3,6 +3,7 @@ import Script from "next/script";
 import { GA_MEASUREMENT_ID } from "@/lib/analytics";
 
 const META_PIXEL_ID = process.env.NEXT_PUBLIC_META_PIXEL_ID;
+const GTM_CONTAINER_ID = process.env.NEXT_PUBLIC_GTM_CONTAINER_ID;
 
 if (process.env.NODE_ENV === "development" && !META_PIXEL_ID) {
   console.warn("NEXT_PUBLIC_META_PIXEL_ID belum di-set; Meta Pixel tidak akan dimuat.");
