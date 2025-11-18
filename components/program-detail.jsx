@@ -95,7 +95,7 @@ export function ProgramDetail({ slug }) {
               <Countdown startISO={startDate} />
             </div>
 
-            <CTAButtons mayamayarLink={mayarLink} adminWA={ADMIN_WA} onMayarClick={handleMayarClick} onAdminClick={handleAdminClick} />
+            <CTAButtons mayarLink={mayarLink} adminWA={ADMIN_WA} onMayarClick={handleMayarClick} onAdminClick={handleAdminClick} />
             <div className="mt-3 text-xs text-emerald-700 font-medium">
               <span className="flame" aria-hidden>
                 🔥
